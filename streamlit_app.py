@@ -13,7 +13,7 @@ assert SUPABASE_URL and SUPABASE_ANON_KEY, "Set SUPABASE_URL and SUPABASE_ANON_K
 sb: Client = create_client(SUPABASE_URL, SUPABASE_ANON_KEY)
 embedder = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2")
 
-st.title("🎯 Art Collector Intelligence")
+st.write("")  # keeps spacing clean
 
 # Sidebar filters
 with st.sidebar:
