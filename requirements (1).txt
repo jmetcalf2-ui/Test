@@ -1,0 +1,15 @@
+streamlit==1.37.1
+supabase==2.6.0
+pandas==2.2.2
+numpy==1.26.4
+
+# Semantic search dependencies (pinned for stability)
+sentence-transformers==3.0.1
+transformers==4.41.2
+torch==2.2.2
+torchvision==0.17.2
+torchaudio==2.2.2
+accelerate==0.30.1
+
+scikit-learn==1.4.2
+scipy==1.11.4
