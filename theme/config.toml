@@ -1,0 +1,8 @@
+# Streamlit theme (light/dark). Users can toggle; we also supply custom CSS tokens.
+[theme]
+base="dark"
+primaryColor="#1ec0a6"          # original cool green-blue
+backgroundColor="#0b0c0d"       # near-black
+secondaryBackgroundColor="#121416" # slightly elevated
+textColor="#e8f0f2"
+font="sans serif"

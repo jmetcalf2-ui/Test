@@ -1,0 +1,106 @@
+/* =============== Design Tokens =============== */
+:root {
+  --bg: #0b0c0d;
+  --bg-light: #f7f8f9;
+  --panel: #121416;
+  --panel-light: #ffffff;
+  --text: #e8f0f2;
+  --text-dark: #0b0c0d;
+  --muted: #6b7280;
+  --accent: #1ec0a6;   /* customized cool green-blue (not Supabase's exact hue) */
+  --border: #202427;
+  --chip-bg: #102724;
+  --chip-text: #b9fff1;
+  --danger: #ff6b6b;
+  --warning: #ffd166;
+  --success: #4ade80;
+  --radius-lg: 16px;
+  --radius-xl: 22px;
+  --shadow-ambient: 0 8px 28px rgba(0,0,0,0.25);
+  --focus-ring: 0 0 0 3px rgba(30,192,166,0.35);
+}
+
+/* Light mode approximation (Streamlit sets base; these help our components) */
+html[data-theme="light"] {
+  --bg: #f7f8f9;
+  --panel: #ffffff;
+  --text: #0b0c0d;
+  --muted: #64748b;
+  --border: #e5e7eb;
+  --chip-bg: #e8fdf9;
+  --chip-text: #065f46;
+}
+
+/* Global polishing */
+.block-container {
+  padding-top: 1.5rem;
+}
+h1, h2, h3 {
+  letter-spacing: 0.2px;
+}
+a {
+  transition: opacity 0.15s ease;
+}
+a:hover { opacity: 0.85; }
+
+/* ---------- Cards / Tiles ---------- */
+.ac-card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  padding: 18px 18px;
+  box-shadow: var(--shadow-ambient);
+}
+html[data-theme="light"] .ac-card { background: var(--panel); }
+
+.ac-kpi {
+  display: grid;
+  gap: 6px;
+}
+.ac-kpi .label {
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+.ac-kpi .value {
+  font-size: 1.6rem;
+  font-weight: 700;
+}
+.ac-kpi .delta {
+  font-size: 0.9rem;
+  opacity: 0.9;
+}
+
+/* ---------- Pills / Chips ---------- */
+.ac-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--chip-bg);
+  color: var(--chip-text);
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+
+/* ---------- Drawer (simulated) ---------- */
+.ac-drawer {
+  background: var(--panel);
+  border-left: 1px solid var(--border);
+  padding: 16px;
+  height: 100%;
+  border-top-left-radius: var(--radius-lg);
+  border-bottom-left-radius: var(--radius-lg);
+  box-shadow: -8px 0 28px rgba(0,0,0,0.25);
+}
+
+/* ---------- Focus, hover micro-interactions ---------- */
+.ac-focusable:focus {
+  outline: none;
+  box-shadow: var(--focus-ring);
+  border-radius: var(--radius-lg);
+  transition: box-shadow 180ms ease;
+}
+.hover-raise { transition: transform 160ms ease; }
+.hover-raise:hover { transform: translateY(-2px); }
