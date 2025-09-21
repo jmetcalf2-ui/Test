@@ -46,12 +46,10 @@ with col4:
     st.markdown('</div>', unsafe_allow_html=True)
 
 st.markdown("### Getting Started")
-st.write(
-    "• Navigate to **Dashboard** for a quick pulse.  
-"
-    "• Open **Collectors** to search, filter, and view details.  
-"
-    "• Use **Insights** for advanced analytics around ranking and interests."
-)
+st.markdown("""
+• Navigate to **Dashboard** for a quick pulse.  
+• Open **Collectors** to search, filter, and view details.  
+• Use **Insights** for advanced analytics around ranking and interests.
+""")
 
 st.info("This starter is configured to use a white background and Helvetica. If you still see clipping, increase the top padding in assets/style.css.")
