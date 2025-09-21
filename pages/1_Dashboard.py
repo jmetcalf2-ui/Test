@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import os
-import time
 import pandas as pd
 import streamlit as st
 
@@ -24,46 +23,52 @@ if not hc.get("ok"):
 
 # Controls
 with st.container():
-    c1, c2, c3 = st.columns([2,1,1])
+    c1, c2, c3 = st.columns([2, 1, 1])
     with c1:
         q = st.text_input("Search by name, city, or country", placeholder="e.g., Bruce Nauman, New York, USA")
     with c2:
-        tier = st.multiselect("Tier", options=["A","B","C"], placeholder="Any")
+        tier = st.multiselect("Tier", options=["A", "B", "C"], placeholder="Any")
     with c3:
         limit = st.number_input("Max rows", min_value=10, max_value=2000, value=200, step=10)
 
-# Query Supabase
 supabase = get_supabase()
 
-query = supabase.table("leads_rows").select("*")
+def run_query(table_name: str):
+    query = supabase.table(table_name).select("*")
+    if q:
+        like = f"%{q}%"
+        # apply ilike to common columns
+        query = query.or_(f"full_name.ilike.{like},city.ilike.{like},country.ilike.{like}")
+    if tier:
+        query = query.in_("tier", tier)
+    query = query.limit(int(limit))
+    return query.execute()
 
-# Apply basic filters
-if q:
-    # Use ilike on several columns (if they exist). Missing columns will be ignored by server,
-    # but to be safe, we keep a single ilike on full_name and city/country when available.
-    # supabase-py v2 supports 'or' in filter string
-    like = f"%{q}%"
-    query = query.or_(f"full_name.ilike.{like},city.ilike.{like},country.ilike.{like}")
+rows = []
+active_table = None
+error_msg = None
 
-if tier:
-    # Use in_ filter
-    query = query.in_("tier", tier)
+# Try leads_rows first, then leads
+for t in ("leads_rows", "leads"):
+    try:
+        resp = run_query(t)
+        rows = resp.data or []
+        active_table = t
+        break
+    except Exception as e:
+        error_msg = str(e)
+        continue
 
-query = query.limit(int(limit))
-
-try:
-    resp = query.execute()
-    rows = resp.data or []
-except Exception as e:
-    st.error(f"Query failed: {e}")
+if active_table is None:
+    st.error(f"Query failed. Last error: {error_msg}")
     st.stop()
 
 if not rows:
-    st.info("No rows found. Adjust filters or add data to the 'leads_rows' table.")
+    st.info(f"No rows found in '{active_table}'. Adjust filters or add data.")
 else:
     df = pd.DataFrame(rows)
-    # Reorder a few likely columns if present
-    preferred = [c for c in ["full_name","city","country","tier","lead_score","lead_id","updated_at"] if c in df.columns]
+    preferred = [c for c in ["full_name", "city", "country", "tier", "lead_score", "lead_id", "updated_at", "id"] if c in df.columns]
     remaining = [c for c in df.columns if c not in preferred]
     df = df[preferred + remaining] if preferred else df
     st.dataframe(df, use_container_width=True, hide_index=True)
+    st.caption(f"Showing data from **{active_table}**")
